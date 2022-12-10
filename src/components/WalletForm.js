@@ -5,6 +5,7 @@ import { addExpense } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
+    id: 0,
     value: '',
     description: '',
     currency: 'USD',
@@ -20,11 +21,19 @@ class WalletForm extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const { dispatch } = this.props;
+    const { id } = this.state;
     dispatch(addExpense(this.state));
+    console.log('após dispatch');
+    this.setState({
+      id: id + 1,
+      value: '',
+      description: '',
+    });
   };
 
   render() {
     const { currencies } = this.props;
+    const { value, description } = this.state;
 
     return (
       <form onSubmit={ this.handleSubmit }>
@@ -35,6 +44,7 @@ class WalletForm extends Component {
             type="number"
             name="value"
             id="value"
+            value={ value }
             onChange={ this.handleChange }
           />
         </label>
@@ -45,6 +55,7 @@ class WalletForm extends Component {
             type="text"
             name="description"
             id="description"
+            value={ description }
             onChange={ this.handleChange }
           />
         </label>

@@ -1,4 +1,5 @@
 import getCurrencies from '../../services/currencyAPI';
+import getExchangeRates from '../../services/getExchangeRates';
 
 export const USER_LOGIN = 'USER_LOGIN';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
@@ -13,12 +14,13 @@ export const userLogin = (email) => ({
   },
 });
 
-export const addExpense = (expense) => ({
-  type: ADD_EXPENSE,
-  payload: {
-    expense,
-  },
-});
+export const addExpense = (expense) => async (dispatch) => {
+  const exchangeRates = await getExchangeRates();
+  dispatch({
+    type: ADD_EXPENSE,
+    payload: { ...expense, exchangeRates: { ...exchangeRates } },
+  });
+};
 
 const requestCurrencies = () => ({
   type: REQUEST_CURRENCIES,
