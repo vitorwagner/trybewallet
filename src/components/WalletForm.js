@@ -23,7 +23,6 @@ class WalletForm extends Component {
     const { dispatch } = this.props;
     const { id } = this.state;
     dispatch(addExpense(this.state));
-    console.log('após dispatch');
     this.setState({
       id: id + 1,
       value: '',
