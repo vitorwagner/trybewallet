@@ -5,7 +5,7 @@ export const USER_LOGIN = 'USER_LOGIN';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const REQUEST_CURRENCIES = 'REQUEST_CURRENCIES';
 export const SET_CURRENCIES = 'SET_CURRENCIES';
-export const REQUEST_CURRENCIES_ERROR = 'REQUEST_CURRENCIES_ERROR';
+// export const REQUEST_CURRENCIES_ERROR = 'REQUEST_CURRENCIES_ERROR';
 
 export const userLogin = (email) => ({
   type: USER_LOGIN,
@@ -31,10 +31,10 @@ const setCurrencies = (payload) => ({
   payload,
 });
 
-const requestCurrenciesError = (error) => ({
-  type: REQUEST_CURRENCIES_ERROR,
-  error,
-});
+// const requestCurrenciesError = (error) => ({
+//   type: REQUEST_CURRENCIES_ERROR,
+//   error,
+// });
 
 export const fetchCurrencies = () => async (dispatch) => {
   dispatch(requestCurrencies());
@@ -43,6 +43,6 @@ export const fetchCurrencies = () => async (dispatch) => {
     const currencies = await getCurrencies();
     dispatch(setCurrencies(currencies));
   } catch (error) {
-    dispatch(requestCurrenciesError(error));
+    // dispatch(requestCurrenciesError(error));
   }
 };
