@@ -5,6 +5,7 @@ export const USER_LOGIN = 'USER_LOGIN';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const REQUEST_CURRENCIES = 'REQUEST_CURRENCIES';
 export const SET_CURRENCIES = 'SET_CURRENCIES';
+export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
 // export const REQUEST_CURRENCIES_ERROR = 'REQUEST_CURRENCIES_ERROR';
 
 export const userLogin = (email) => ({
@@ -21,6 +22,11 @@ export const addExpense = (expense) => async (dispatch) => {
     payload: { ...expense, exchangeRates: { ...exchangeRates } },
   });
 };
+
+export const removeExpense = (payload) => ({
+  type: REMOVE_EXPENSE,
+  payload,
+});
 
 const requestCurrencies = () => ({
   type: REQUEST_CURRENCIES,
