@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addExpense } from '../redux/actions';
+import { addExpense, editExpense } from '../redux/actions';
 
 class WalletForm extends Component {
   state = {
@@ -20,8 +20,15 @@ class WalletForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { dispatch } = this.props;
+    const { dispatch, isEditing, idToEdit } = this.props;
     const { id } = this.state;
+    if (isEditing) {
+      this.setState({ id: idToEdit }, () => {
+        dispatch(editExpense(this.state));
+      });
+
+      return;
+    }
     dispatch(addExpense(this.state));
     this.setState({
       id: id + 1,
@@ -31,7 +38,7 @@ class WalletForm extends Component {
   };
 
   render() {
-    const { currencies } = this.props;
+    const { currencies, isEditing } = this.props;
     const { value, description } = this.state;
 
     return (
@@ -100,7 +107,10 @@ class WalletForm extends Component {
             <option>Saúde</option>
           </select>
         </label>
-        <button type="submit">Adicionar Despesa</button>
+        <button type="submit">
+          { isEditing ? 'Editar despesa'
+            : 'Adicionar Despesa' }
+        </button>
       </form>
     );
   }
@@ -108,11 +118,15 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  isEditing: state.wallet.isEditing,
+  idToEdit: state.wallet.idToEdit,
 });
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  idToEdit: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);

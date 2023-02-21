@@ -6,7 +6,8 @@ export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const REQUEST_CURRENCIES = 'REQUEST_CURRENCIES';
 export const SET_CURRENCIES = 'SET_CURRENCIES';
 export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
-// export const REQUEST_CURRENCIES_ERROR = 'REQUEST_CURRENCIES_ERROR';
+export const EDIT_EXPENSE = 'EDIT_EXPENSE';
+export const START_EDIT_EXPENSE = 'START_EDIT_EXPENSE';
 
 export const userLogin = (email) => ({
   type: USER_LOGIN,
@@ -37,10 +38,18 @@ const setCurrencies = (payload) => ({
   payload,
 });
 
-// const requestCurrenciesError = (error) => ({
-//   type: REQUEST_CURRENCIES_ERROR,
-//   error,
-// });
+export const editExpense = (expense) => async (dispatch) => {
+  const exchangeRates = await getExchangeRates();
+  dispatch({
+    type: EDIT_EXPENSE,
+    payload: { ...expense, exchangeRates: { ...exchangeRates } },
+  });
+};
+
+export const startEditExpense = (payload) => ({
+  type: START_EDIT_EXPENSE,
+  payload,
+});
 
 export const fetchCurrencies = () => async (dispatch) => {
   dispatch(requestCurrencies());

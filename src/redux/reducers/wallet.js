@@ -1,10 +1,11 @@
-import { SET_CURRENCIES, ADD_EXPENSE, REMOVE_EXPENSE } from '../actions';
+import { SET_CURRENCIES, ADD_EXPENSE, REMOVE_EXPENSE,
+  EDIT_EXPENSE, START_EDIT_EXPENSE } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
-  // editor: false,
-  // idToEdit: 0,
+  isEditing: false,
+  idToEdit: 0,
 };
 
 const walletReducer = (state = INITIAL_STATE, action) => {
@@ -25,6 +26,22 @@ const walletReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: action.payload,
+    };
+
+  case START_EDIT_EXPENSE:
+    return {
+      ...state,
+      idToEdit: action.payload,
+      isEditing: true,
+    };
+
+  case EDIT_EXPENSE:
+    return {
+      ...state,
+      expenses: state.expenses.map((expense) => (
+        expense.id === action.payload.id ? action.payload : expense
+      )),
+      isEditing: false,
     };
   default: return state;
   }
