@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, waitForElementToBeRemoved, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Wallet from '../pages/Wallet';
 import { renderWithRedux } from './helpers/renderWith';
@@ -21,6 +21,7 @@ describe('Testa a página da certeira', () => {
   });
   it('Preenche nova despesa e confere se foi renderizada na tela', async () => {
     const { store } = renderWithRedux(<Wallet />);
+    await waitForElementToBeRemoved(() => screen.getByTestId('loading'));
     const valueInput = screen.getByTestId('value-input');
     const descriptionInput = screen.getByTestId('description-input');
     const currencyInput = screen.getByTestId('currency-input');
@@ -53,6 +54,18 @@ describe('Testa a página da certeira', () => {
     waitFor(() => {
       const total = screen.getAllByTestId('total-field');
       expect(total).toHaveTextContent('14.46');
+    });
+
+    waitFor(() => {
+      const editButton = screen.getByTestId('edit-btn');
+      fireEvent.click(editButton);
+      expect(store.getState().wallet.isEditing).toBe(true);
+    });
+
+    waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-btn');
+      fireEvent.click(deleteButton);
+      waitForElementToBeRemoved(() => screen.getByTestId('delete-btn'));
     });
   });
 });
