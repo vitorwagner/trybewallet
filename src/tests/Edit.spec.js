@@ -4,17 +4,30 @@ import { act } from 'react-dom/test-utils';
 import { renderWithRouterAndRedux } from './helpers/renderWith';
 import App from '../App';
 import mockData from './helpers/mockData';
-import mockFetch from './mock/fetch';
+
+const MockExpense = [{
+  id: 0,
+  value: '123',
+  currency: 'ARS',
+  method: 'Dinheiro',
+  tag: 'Lazer',
+  description: 'Aloha',
+  exchangeRates: mockData,
+}, {
+  id: 1,
+  value: '123',
+  currency: 'CAD',
+  method: 'Dinheiro',
+  tag: 'Lazer',
+  description: 'Aloha 2',
+  exchangeRates: mockData,
+}];
 
 describe('Testa o botão de Editar', () => {
-  beforeEach(() => {
-    jest.spyOn(global, 'fetch').mockImplementation(mockFetch);
-    jest.spyOn(global, 'alert').mockImplementation(() => {});
-  });
   test('Se a aplicação funciona corretamente', async () => {
     const INITIAL_STATE = {
       wallet: {
-        expenses: [],
+        expenses: MockExpense,
         isEditing: false,
         idToEdit: 0,
         currencies: Object.keys(mockData),
@@ -22,26 +35,6 @@ describe('Testa o botão de Editar', () => {
     renderWithRouterAndRedux(<App />, { initialEntries: ['/carteira'], initialState: INITIAL_STATE });
 
     const valueInput = screen.getByTestId('value-input');
-    const descriptionInput = screen.getByTestId('description-input');
-    const currencyInput = screen.getByTestId('currency-input');
-    const methodInput = screen.getByTestId('method-input');
-    const tagInput = screen.getByTestId('tag-input');
-    const button = screen.getByRole('button');
-
-    act(() => {
-      userEvent.type(valueInput, '123');
-    });
-
-    expect(valueInput.value).toBe('123');
-    act(() => {
-      userEvent.type(descriptionInput, 'Aloha');
-      userEvent.type(currencyInput, 'ARS');
-      userEvent.type(methodInput, 'Dinheiro');
-      userEvent.type(tagInput, 'Lazer');
-      userEvent.click(button);
-      userEvent.click(button);
-    });
-
     const totalField = screen.getByTestId('total-field');
     const addButton = screen.getByRole('button', { name: /adicionar despesa/i });
     expect(addButton.textContent).toBe('Adicionar Despesa');
@@ -52,7 +45,7 @@ describe('Testa o botão de Editar', () => {
       });
     });
 
-    expect(totalField.textContent).toBe('1169.26');
+    expect(totalField.textContent).toBe('466.85');
     expect(addButton.textContent).toBe('Editar despesa');
     expect(valueInput.value).toBe('');
     act(() => {
@@ -62,8 +55,12 @@ describe('Testa o botão de Editar', () => {
     act(() => {
       userEvent.click(addButton);
     });
-    screen.debug();
-    expect(totalField.textContent).toBe('1169.26');
-    expect(addButton.textContent).toBe('Editar despesa');
+
+    await waitFor(() => {
+      expect(totalField.textContent).toBe('4522.42');
+    });
+    await waitFor(() => {
+      expect(addButton.textContent).toBe('Adicionar Despesa');
+    });
   });
 });

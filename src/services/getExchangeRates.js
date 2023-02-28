@@ -9,10 +9,6 @@ const getExchangeRates = async () => {
   } catch (error) {
     console.log(error);
   }
-
-  // return response.ok
-  //   ? Promise.resolve(json)
-  //   : Promise.reject(json);
 };
 
 export default getExchangeRates;
