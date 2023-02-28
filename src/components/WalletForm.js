@@ -23,7 +23,6 @@ class WalletForm extends Component {
     const { dispatch, isEditing, idToEdit } = this.props;
     const { id } = this.state;
     if (isEditing) {
-      console.log(isEditing, idToEdit, this.state);
       const edit = { ...this.state, id: idToEdit };
       dispatch(editExpense(edit));
 
