@@ -3,8 +3,14 @@ import { fireEvent, screen, waitFor, waitForElementToBeRemoved, within } from '@
 import userEvent from '@testing-library/user-event';
 import Wallet from '../pages/Wallet';
 import { renderWithRedux } from './helpers/renderWith';
+import mockFetch from './mock/fetch';
 
 describe('Testa a página da certeira', () => {
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch').mockImplementation(mockFetch);
+    jest.spyOn(global, 'alert').mockImplementation(() => {});
+  });
+
   it('Testa se as moedas foram preenchidas corretamente', async () => {
     renderWithRedux(<Wallet />);
     const currencyInput = screen.getByTestId('currency-input');

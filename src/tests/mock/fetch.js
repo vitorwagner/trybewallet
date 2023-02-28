@@ -1,4 +1,4 @@
-import mockData from './data';
+import mockData from '../helpers/mockData';
 
 const mockFetch = () => Promise.resolve({
   status: 200,

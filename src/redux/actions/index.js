@@ -1,4 +1,3 @@
-import getCurrencies from '../../services/currencyAPI';
 import getExchangeRates from '../../services/getExchangeRates';
 
 export const USER_LOGIN = 'USER_LOGIN';
@@ -55,7 +54,8 @@ export const fetchCurrencies = () => async (dispatch) => {
   dispatch(requestCurrencies());
 
   try {
-    const currencies = await getCurrencies();
+    let currencies = await getExchangeRates();
+    currencies = Object.keys(currencies).filter((currency) => currency !== 'USDT');
     dispatch(setCurrencies(currencies));
   } catch (error) {
     // dispatch(requestCurrenciesError(error));
