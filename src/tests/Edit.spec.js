@@ -24,6 +24,17 @@ const MockExpense = [{
 }];
 
 describe('Testa o botão de Editar', () => {
+  beforeEach(() => {
+    jest.spyOn(global, 'fetch').mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockData),
+    });
+    jest.spyOn(global, 'alert').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('Se a aplicação funciona corretamente', async () => {
     const INITIAL_STATE = {
       wallet: {
@@ -57,7 +68,7 @@ describe('Testa o botão de Editar', () => {
     });
 
     await waitFor(() => {
-      expect(totalField.textContent).toBe('4522.42');
+      expect(totalField.textContent).toBe('4155.13');
     });
     await waitFor(() => {
       expect(addButton.textContent).toBe('Adicionar Despesa');

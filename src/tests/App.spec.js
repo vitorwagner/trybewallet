@@ -8,7 +8,7 @@ import mockData from './helpers/mockData';
 
 const INITIAL_STATE = {
   wallet: {
-    currencies: Object.keys(mockData),
+    currencies: [],
     expenses: [],
     isEditing: false,
     idToEdit: 0,
@@ -24,13 +24,21 @@ describe('Testa o aplicativo', () => {
     const button = screen.getByRole('button', { name: /entrar/i });
     const password = screen.getByTestId('password-input');
     const email = screen.getByTestId('email-input');
-    userEvent.type(email, 'testando@teste.com.br');
-    userEvent.type(password, '123456');
+    act(() => {
+      userEvent.type(email, 'testando@teste.com.br');
+      userEvent.type(password, '123456');
+    });
     expect(button).toBeInTheDocument();
     expect(button).not.toBeDisabled();
-    userEvent.click(button);
+    act(() => {
+      userEvent.click(button);
+    });
     expect(history.location.pathname).toBe('/carteira');
     store.dispatch = jest.fn();
+    jest.spyOn(global, 'fetch').mockResolvedValue({
+      json: jest.fn().mockResolvedValue(mockData),
+    });
+    jest.spyOn(global, 'alert').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -50,8 +58,8 @@ describe('Testa o aplicativo', () => {
       userEvent.type(valueInput, '123');
       userEvent.type(descriptionInput, 'Aloha');
       userEvent.selectOptions(currencyInput, arsOption);
-      userEvent.type(methodInput, 'Dinheiro');
-      userEvent.type(tagInput, 'Lazer');
+      userEvent.selectOptions(methodInput, 'Dinheiro');
+      userEvent.selectOptions(tagInput, 'Lazer');
       userEvent.click(button);
     });
 
@@ -59,7 +67,7 @@ describe('Testa o aplicativo', () => {
       const tableDescription = screen.getByRole('cell', { name: /aloha/i });
       const tableCurrency = screen.getByRole('cell', { name: /peso argentino\/real brasileiro/i });
       const total = screen.getByTestId('total-field');
-      expect(total).toHaveTextContent('3.26');
+      expect(total).toHaveTextContent('4.87');
       expect(tableDescription).toBeInTheDocument();
       expect(tableCurrency).toBeInTheDocument();
     });
@@ -71,7 +79,7 @@ describe('Testa o aplicativo', () => {
 
     await waitFor(() => {
       const total = screen.getByTestId('total-field');
-      expect(total).toHaveTextContent('12.40');
+      expect(total).toHaveTextContent('18.53');
     });
   });
 });
