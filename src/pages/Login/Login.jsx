@@ -39,31 +39,37 @@ class Login extends React.Component {
     const { email, password } = this.state;
 
     return (
-      <div className="form-container">
+      <section>
 
-        <form onSubmit={ this.handleSubmit }>
-          <input
-            type="email"
-            name="email"
-            data-testid="email-input"
-            placeholder="e-mail"
-            onChange={ this.handleChange }
-          />
-          <input
-            type="password"
-            name="password"
-            data-testid="password-input"
-            placeholder="senha"
-            onChange={ this.handleChange }
-          />
-          <button
-            type="submit"
-            disabled={ !this.validateEmail(email) || this.validatePassword(password) }
-          >
-            Entrar
-          </button>
-        </form>
-      </div>
+        <div className="form-container">
+          <h3>Login</h3>
+
+          <form onSubmit={ this.handleSubmit }>
+            <input
+              type="email"
+              autoComplete="username"
+              name="email"
+              data-testid="email-input"
+              placeholder="e-mail"
+              onChange={ this.handleChange }
+            />
+            <input
+              type="password"
+              autoComplete="current-password"
+              name="password"
+              data-testid="password-input"
+              placeholder="senha"
+              onChange={ this.handleChange }
+            />
+            <button
+              type="submit"
+              disabled={ !this.validateEmail(email) || this.validatePassword(password) }
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      </section>
     );
   }
 }
